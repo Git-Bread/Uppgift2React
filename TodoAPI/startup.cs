@@ -9,7 +9,7 @@ using TodoApi.Data;
 
 namespace TodoApi
 {
-    //startup class, alot of new configuration and tried using OpenAPI aswell since i heard it was cool
+    //startup class, alot of new configuration and tried using OpenAPI swashbuckle aswell since i heard it was cool
     public class Startup
     {
         //constructor
@@ -22,14 +22,21 @@ namespace TodoApi
         public void ConfigureServices(IServiceCollection services)
         {
             //sqlite database connection
-            services.AddDbContext<AppDbContext>(options =>
+            services.AddDbContext<TodoContext>(options =>
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddControllers();
             
-            //OpenAPI
+            //OpenAPI, swashbuckle
             services.AddEndpointsApiExplorer();
-            services.AddOpenApi();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { 
+                    Title = "Todo API", 
+                    Version = "v1",
+                    Description = "Todo Api"
+                });
+            });
 
             //Add CORS policy if needed, allows for cross-origin requests and less un-fun bug squashing
             services.AddCors(options =>
@@ -42,7 +49,7 @@ namespace TodoApi
         }
 
         //http pipeline configuration
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppDbContext context)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, TodoContext context)
         {
             //checks so that its created, love me a descriptive function name
             context.Database.EnsureCreated();
@@ -51,8 +58,9 @@ namespace TodoApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseOpenApi();
-                app.UseSwaggerUi();
+                //does not work in .net 9, but works well here
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Todo API v1"));
             }
 
             app.UseHttpsRedirection();

@@ -1,0 +1,118 @@
+# ASP.NET Core
+bin/
+obj/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+.vs/
+.vscode/
+.idea/
+*.sln.iml
+[Dd]ebug/
+[Rr]elease/
+_ReSharper*/
+*.resharper
+*.DotSettings.user
+*.restproj.user
+
+# SQLite database files
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
+# Visual Studio for Mac
+.vscode/
+.idea/
+*.sln.DotSettings.user
+*.csproj.DotSettings.user
+
+# User-specific files
+appsettings.Development.json
+appsettings.local.json
+appsettings.*.json
+!appsettings.json
+*.pfx
+*.publishsettings
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# User secrets
+*.usersecrets.json
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# Visual Studio auto-generated files
+.vs/
+*_i.c
+*_p.c
+*_i.h
+*.ilk
+*.meta
+*.obj
+*.pch
+*.pdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*.log
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+
+# ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# NuGet
+*.nupkg
+# The packages folder can be ignored because of Package Restore
+**/[Pp]ackages/*
+# except build/, which is used as an MSBuild target
+!**/[Pp]ackages/build/
+# Uncomment if necessary however generally it will be regenerated when needed
+#!**/[Pp]ackages/repositories.config
+
+# Windows specific
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# macOS specific
+.DS_Store
+._*
+
+# JetBrains Rider
+.idea/
+*.sln.iml

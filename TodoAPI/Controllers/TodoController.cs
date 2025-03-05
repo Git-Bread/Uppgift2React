@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 using TodoList.Models;
 using TodoApi.Data;
 
-namespace TodoAPI.Controllers
+namespace TodoApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class TodoController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly TodoContext _context;
 
-        public TodoController(AppDbContext context)
+        public TodoController(TodoContext context)
         {
             _context = context;
         }
