@@ -1,50 +1,58 @@
-# MyApiProject
+# Todo API
 
-This is a .NET API project that provides weather forecast information.
+REST API built with .NET 6 for managing todo items with full CRUD operations and Swagger documentation.
+
+## Project Overview
+
+This Todo API provides a complete backend for managing todo items, featuring:
+
+- **RESTful Endpoints**: Full CRUD operations for todo items
+- **Data Persistence**: SQLite database with Entity Framework Core
+- **API Documentation**: Swagger/OpenAPI integration
+- **Input Validation**: Built-in validation for data integrity
+- **Consistent Responses**: Standardized JSON response format
+- **CORS Support**: Configured for cross-origin requests
 
 ## Project Structure
 
-- **Controllers**: Contains the API controllers that handle HTTP requests.
-  - `WeatherForecastController.cs`: Manages requests related to weather forecasts.
-  
-- **Models**: Contains the data models used in the application.
-  - `WeatherForecast.cs`: Defines the properties of a weather forecast.
+- **Controllers**: Contains the API controller
+  - `TodoController.cs`: Handles all todo item operations
 
-- **Program.cs**: The entry point of the application that configures and starts the web host.
+- **Models**: Data models and DTOs
+  - `TodoItem.cs`: The core entity model
+  - `TodoItemDTO.cs`: Data Transfer Object for input operations
 
-- **appsettings.json**: Configuration settings for the application, including connection strings and application-specific settings.
+- **Data**: Database context and configuration
+  - `TodoContext.cs`: EF Core DbContext with seed data
 
-- **appsettings.Development.json**: Development-specific configuration settings that override the default settings.
+- **Migrations**: Database migration files
+  - Generated EF Core migrations for database schema
 
-- **MyApiProject.csproj**: The project file that includes dependencies, target framework, and build settings.
+- **Program.cs**: Application entry point
 
-## Setup Instructions
+- **Startup.cs**: Application configuration
 
-1. Clone the repository:
-   ```
-   git clone <repository-url>
-   ```
+## API Endpoints
 
-2. Navigate to the project directory:
-   ```
-   cd MyApiProject
-   ```
+| Method | Endpoint               | Description                        |
+|--------|------------------------|------------------------------------|
+| GET    | `/api/todo`            | Get all todo items                 |
+| GET    | `/api/todo/{id}`       | Get a specific todo item           |
+| POST   | `/api/todo`            | Create a new todo item             |
+| PUT    | `/api/todo/{id}`       | Update an existing todo item       |
+| DELETE | `/api/todo/{id}`       | Delete a todo item                 |
+| PATCH  | `/api/todo/{id}/change-status` | Toggle completion status   |
 
-3. Restore the project dependencies:
-   ```
-   dotnet restore
-   ```
+## Response Format
 
-4. Run the application:
-   ```
-   dotnet run
-   ```
+All API responses follow a consistent format:
 
-## Usage
+```json
+{
+  "status": 200,
+  "data": { ... },
+  "title": "Success",
+  "message": "Operation completed successfully"
+}
 
-Once the application is running, you can access the weather forecast API at the following endpoint:
-```
-GET /weatherforecast
-```
-
-This will return a list of weather forecasts. You can also use other HTTP methods as defined in the `WeatherForecastController`.
+- By maga2101
