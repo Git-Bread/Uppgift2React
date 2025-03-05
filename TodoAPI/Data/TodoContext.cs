@@ -15,11 +15,12 @@ namespace TodoApi.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             // Seed some initial data
             modelBuilder.Entity<TodoItem>().HasData(
-                new TodoItem { Id = 1, Title = "Build a REST API in .NET", IsCompleted = false, CreatedAt = DateTime.Now },
-                new TodoItem { Id = 2, Title = "Learn What OpenAPI Is", IsCompleted = false, CreatedAt = DateTime.Now },
-                new TodoItem { Id = 3, Title = "Make sure it dosent crash and burn", IsCompleted = false, CreatedAt = DateTime.Now }
+                new TodoItem { Title = "Build a REST API in .NET", IsCompleted = false, CreatedAt = DateTime.Now },
+                new TodoItem { Title = "Learn What OpenAPI Is", IsCompleted = false, CreatedAt = DateTime.Now },
+                new TodoItem { Title = "Make sure it dosent crash and burn", IsCompleted = false, CreatedAt = DateTime.Now }
             );
         }
     }

@@ -54,14 +54,15 @@ namespace TodoApi
             //checks so that its created, love me a descriptive function name
             context.Database.EnsureCreated();
             
-            //development environment check
-            if (env.IsDevelopment())
+
+            app.UseDeveloperExceptionPage();
+            //does not work in .net 9, but works well here
+            app.UseSwagger();
+            app.UseSwaggerUI(c => 
             {
-                app.UseDeveloperExceptionPage();
-                //does not work in .net 9, but works well here
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Todo API v1"));
-            }
+                c.SwaggerEndpoint("./swagger/v1/swagger.json", "Todo API v1");
+                c.RoutePrefix = string.Empty;
+            });
 
             app.UseHttpsRedirection();
             app.UseRouting();
