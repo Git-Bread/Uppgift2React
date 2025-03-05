@@ -1,11 +1,13 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TodoList.Models
 {
     public class TodoItem
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] //redundant since it does it automaticaly but its good for clarity
         public int Id { get; set; }
         
         [Required]
