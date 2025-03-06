@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TodoApi.Data;
 
@@ -10,9 +11,10 @@ using TodoApi.Data;
 namespace TodoApi.Migrations
 {
     [DbContext(typeof(TodoContext))]
-    partial class TodoContextModelSnapshot : ModelSnapshot
+    [Migration("20250306235150_ConvertStatusToEnum")]
+    partial class ConvertStatusToEnum
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.0");
@@ -24,10 +26,6 @@ namespace TodoApi.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Status")
@@ -46,24 +44,21 @@ namespace TodoApi.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 3, 7, 0, 55, 10, 887, DateTimeKind.Local).AddTicks(9263),
-                            Description = "Create a full CRUD API with proper error handling and documentation",
+                            CreatedAt = new DateTime(2025, 3, 7, 0, 51, 50, 181, DateTimeKind.Local).AddTicks(9361),
                             Status = 0,
                             Title = "Build a REST API in .NET"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 3, 7, 0, 55, 10, 887, DateTimeKind.Local).AddTicks(9266),
-                            Description = "Study Swagger/OpenAPI specifications and implementation",
+                            CreatedAt = new DateTime(2025, 3, 7, 0, 51, 50, 181, DateTimeKind.Local).AddTicks(9364),
                             Status = 0,
                             Title = "Learn What OpenAPI Is"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 3, 7, 0, 55, 10, 887, DateTimeKind.Local).AddTicks(9269),
-                            Description = "Putting out fires",
+                            CreatedAt = new DateTime(2025, 3, 7, 0, 51, 50, 181, DateTimeKind.Local).AddTicks(9367),
                             Status = 0,
                             Title = "Make sure it dosent crash and burn"
                         });

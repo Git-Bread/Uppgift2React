@@ -102,7 +102,8 @@ namespace TodoApi.Controllers
                 var todoItem = new TodoItem
                 {
                     Title = todoItemDTO.Title,
-                    IsCompleted = todoItemDTO.IsCompleted ?? false,
+                    Description = todoItemDTO.Description,
+                    Status = todoItemDTO.Status ?? TodoStatus.NotStarted,
                     CreatedAt = DateTime.Now
                 };
                 
@@ -162,7 +163,8 @@ namespace TodoApi.Controllers
                 }
                 
                 todoItem.Title = todoItemDTO.Title;
-                todoItem.IsCompleted = todoItemDTO.IsCompleted ?? false;
+                todoItem.Description = todoItemDTO.Description;
+                todoItem.Status = todoItemDTO.Status ?? todoItem.Status;
                 await _context.SaveChangesAsync();
 
                 return Ok(new {
@@ -240,14 +242,21 @@ namespace TodoApi.Controllers
                 }
 
                 string statusMessage;
-                if (todoItem.IsCompleted)
+                switch (todoItem.Status)
                 {
-                    todoItem.IsCompleted = false;
-                    statusMessage = "marked as incomplete";
-                }
-                else {
-                    todoItem.IsCompleted = true;
-                    statusMessage = "marked as complete";
+                    case TodoStatus.NotStarted:
+                        todoItem.Status = TodoStatus.Ongoing;
+                        statusMessage = "marked as ongoing";
+                        break;
+                    case TodoStatus.Ongoing:
+                        todoItem.Status = TodoStatus.Completed;
+                        statusMessage = "marked as completed";
+                        break;
+                    case TodoStatus.Completed:
+                    default:
+                        todoItem.Status = TodoStatus.NotStarted;
+                        statusMessage = "marked as not started";
+                        break;
                 }
                 
                 await _context.SaveChangesAsync();
