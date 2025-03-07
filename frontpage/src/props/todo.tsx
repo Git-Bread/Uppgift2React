@@ -43,7 +43,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ id, title, description, status, onR
         })
         .catch(err => {
             console.error(`Error deleting todo:`, err);
-            setError(`Delete failed: ${err.message}`);
+            setError(`Delete failed: ${err.errors}`);
         })
         .finally(() => {
             setIsLoading(false);
@@ -71,7 +71,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ id, title, description, status, onR
         })
         .catch(err => {
             console.error(`Error updating todo status:`, err);
-            setError(`Status update failed: ${err.message}`);
+            setError(`Status update failed: ${err.errors}`);
         })
         .finally(() => {
             setIsLoading(false);
@@ -118,7 +118,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ id, title, description, status, onR
         })
         .catch(err => {
             console.error(`Error updating todo:`, err);
-            setError(`Update failed: ${err.message}`);
+            setError(`Update failed: ${err.errors}`);
         })
         .finally(() => {
             setIsLoading(false);

@@ -71,7 +71,7 @@ const List: React.FC<ListProps> = ({ setError, refreshTrigger }) => {
         setError(`${err.title} (${err.status}): ${err.errors}`);
       } else {
         // This is a network or other error
-        setError(`Connection Error: ${err.message || 'Failed to connect to the server'}`);
+        setError(`Connection Error: ${err.errors || 'Failed to connect to the server'}`);
       }
       setIsLoading(false);
     });
