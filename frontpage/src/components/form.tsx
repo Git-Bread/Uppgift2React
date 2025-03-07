@@ -15,14 +15,14 @@ const Form: React.FC<FormProps> = ({ onRefresh, setError }) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Create new todo object
+    //create new todo object
     const newTodo = {
       title,
       description
-      // status will use default value from the API
+      //standard status
     };
 
-    // Send POST request to create the todo
+    //POST request to create the todo
     fetch('http://localhost:5000/api/todo', {
       method: 'POST',
       headers: {
@@ -40,15 +40,13 @@ const Form: React.FC<FormProps> = ({ onRefresh, setError }) => {
     .then(data => {
       console.log('Successfully created todo:', data);
       
-      // Reset form
+      //reset
       setTitle('');
       setDescription('');
       
-      // Show success message
+      //Nice verification
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 3000);
-      
-      // Trigger refresh of the list
       onRefresh();
     })
     .catch(err => {
@@ -67,7 +65,7 @@ const Form: React.FC<FormProps> = ({ onRefresh, setError }) => {
       {showSuccess && (
         <div className="notification is-success is-light">
           <button className="delete" onClick={() => setShowSuccess(false)}></button>
-          Todo created successfully!
+          <p>Todo created successfully!</p>
         </div>
       )}
       
@@ -75,38 +73,21 @@ const Form: React.FC<FormProps> = ({ onRefresh, setError }) => {
         <div className="field">
           <label className="label">Title</label>
           <div className="control">
-            <input 
-              className="input" 
-              type="text" 
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="What needs to be done?"
-              required
-            />
+            <input className="input" type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="What needs to be done?" required/>
           </div>
         </div>
         
         <div className="field">
           <label className="label">Description</label>
           <div className="control">
-            <textarea 
-              className="textarea" 
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Add details about this task..."
+            <textarea className="textarea" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Add details about this task..."
             />
           </div>
         </div>
         
         <div className="field">
           <div className="control">
-            <button 
-              className={`button is-primary ${isSubmitting ? 'is-loading' : ''}`} 
-              type="submit"
-              disabled={isSubmitting || !title.trim()}
-            >
-              Add Todo
-            </button>
+            <button className={`button is-primary ${isSubmitting ? 'is-loading' : ''}`} type="submit" disabled={isSubmitting || !title.trim()}>Add Todo</button>
           </div>
         </div>
       </form>
