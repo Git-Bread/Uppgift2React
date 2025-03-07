@@ -55,17 +55,15 @@ const TodoItem: React.FC<TodoItemProps> = ({ id, title, description, status, onR
         });
     };
 
-    const onEdit = (id: number): void => {
-        // Initialize form fields with current values
+    //set edit view
+    const onEdit = (): void => {
         setEditTitle(title);
         setEditDescription(description);
-        // Set the editing state to true to show the form
         setIsEditing(true);
     };
 
-    // Save changes
+    //update the todo
     const onSave = (): void => {
-        // Create updated todo object
         const updatedTodo = {
             title: editTitle,
             description: editDescription,
@@ -86,7 +84,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ id, title, description, status, onR
                 throw new Error('Failed to update todo');
             }
             console.log(`Successfully updated todo with id: ${id}`);
-            setIsEditing(false);
+            setIsEditing(false); //Exit edit mode
             if (onRefresh) onRefresh();
         })
         .catch(err => {
@@ -94,6 +92,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ id, title, description, status, onR
         });
     };
 
+    //get the status text
     const getStatusText = () => {
         switch(status) {
             case TodoStatus.Completed:
@@ -106,7 +105,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ id, title, description, status, onR
         }
     };
 
-    // Get appropriate color style based on status
+    //text color based of status
     const getStatusStyle = () => {
         switch(status) {
             case TodoStatus.Completed:
@@ -119,7 +118,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ id, title, description, status, onR
         }
     };
 
-    // If in editing mode, show the edit form
+    //edit mode/view
     if (isEditing) {
         return (
             <li className="mb-4">
@@ -127,35 +126,20 @@ const TodoItem: React.FC<TodoItemProps> = ({ id, title, description, status, onR
                     <div className="field">
                         <label className="label">Title</label>
                         <div className="control">
-                            <input 
-                                className="input" 
-                                type="text" 
-                                value={editTitle}
-                                onChange={(e) => setEditTitle(e.target.value)}
-                            />
+                            <input className="input" type="text" value={editTitle} onChange={(e) => setEditTitle(e.target.value)}/>
                         </div>
                     </div>
                     
                     <div className="field">
                         <label className="label">Description</label>
                         <div className="control">
-                            <textarea 
-                                className="textarea" 
-                                value={editDescription}
-                                onChange={(e) => setEditDescription(e.target.value)}
-                            />
+                            <textarea className="textarea" value={editDescription}onChange={(e) => setEditDescription(e.target.value)}/>
                         </div>
                     </div>
                     
                     <div className="field is-grouped">
                         <div className="control">
-                            <button 
-                                className="button is-small is-success" 
-                                onClick={onSave}
-                                disabled={!editTitle.trim()}
-                            >
-                                Save
-                            </button>
+                            <button className="button is-small is-success" onClick={onSave} disabled={!editTitle.trim()}>Save</button>
                         </div>
                         <div className="control">
                             <button className="button is-small" onClick={() => setIsEditing(false)}>Cancel</button>
@@ -181,14 +165,8 @@ const TodoItem: React.FC<TodoItemProps> = ({ id, title, description, status, onR
                     {/* Status checkbox (non-mobile) */}
                     <div className="column is-narrow">
                         <label className="checkbox">
-                            <span className={`${getStatusStyle()} is-size-7`}>
-                                {getStatusText()}
-                            </span>
-                            <input 
-                                type="checkbox" 
-                                checked={status === TodoStatus.Completed}
-                                onChange={() => onToggle(id)} 
-                                className="ml-2"
+                            <span className={`${getStatusStyle()} is-size-7`}>{getStatusText()}</span>
+                            <input type="checkbox" checked={status === TodoStatus.Completed} onChange={() => onToggle(id)} className="ml-2"
                                 style={{
                                     opacity: status === TodoStatus.NotStarted ? 0.5 : 1,
                                     accentColor: status === TodoStatus.Completed ? 'green' : 'blue'
@@ -200,7 +178,6 @@ const TodoItem: React.FC<TodoItemProps> = ({ id, title, description, status, onR
                 
                 {/* Mobile view - Stacked layout */}
                 <div className="is-hidden-tablet">
-                    {/* Title and description */}
                     <div className="mb-3">
                         <h4 className={`title is-5 ${status === TodoStatus.Completed ? "has-text-grey-light" : ""}`}
                             style={{ textDecoration: status === TodoStatus.Completed ? 'line-through' : 'none' }}>
@@ -210,12 +187,11 @@ const TodoItem: React.FC<TodoItemProps> = ({ id, title, description, status, onR
                     </div>
                 </div>
                 
-                {/* Action buttons and status (mobile and desktop) */}
+                {/* buttons and status (mobile and desktop) */}
                 <div className="columns is-mobile mt-3">
-                    {/* Action buttons */}
                     <div className="column is-8">
                         <div className="buttons">
-                            <button className="button is-small is-info is-light" onClick={() => onEdit(id)}>
+                            <button className="button is-small is-info is-light" onClick={() => onEdit()}>
                                 <span>Edit</span>
                             </button>
                             <button className="button is-small is-danger is-light" onClick={() => onDelete(id)}>
