@@ -58,13 +58,14 @@ const List: React.FC<ListProps> = ({ setError, refreshTrigger }) => {
       {todos.length === 0 ? (
         <p>No todos found</p>
       ) : (
-        <ul>
+        <ul style={{ maxHeight: '80vh', overflowY: 'auto' }}>
           {todos.map(todo => (
             <TodoItem
               key={todo.id}
               id={todo.id}
               text={`${todo.title} - ${todo.description || 'No description'}`}
               completed={todo.status === TodoStatus.Completed}
+              status={todo.status}
             />
           ))}
         </ul>

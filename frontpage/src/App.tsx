@@ -5,7 +5,7 @@ import List from './components/list';
 
 function App() {
   const [error, setError] = useState<string | null>(null);
-  const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
+  const [refreshTrigger] = useState<number>(0);
   
   // ...other code
   

@@ -14,3 +14,6 @@ p {
   line-height: 1.5;
   max-width: 60ch;
 }
+#wrapper {
+  min-height: 86vh !important;
+}
