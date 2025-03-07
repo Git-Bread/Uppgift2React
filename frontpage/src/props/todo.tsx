@@ -35,7 +35,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ id, title, description, status, onR
         .then(response => {
             if (!response.ok) {
                 return response.json().then(errorData => {
-                    throw new Error(errorData.title || 'Failed to delete todo');
+                    throw errorData;
                 });
             }
             console.log(`Successfully deleted todo with id: ${id}`);
@@ -63,7 +63,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ id, title, description, status, onR
         .then(response => {
             if (!response.ok) {
                 return response.json().then(errorData => {
-                    throw new Error(errorData.title || 'Failed to update todo status');
+                    throw errorData;
                 });
             }
             if (onRefresh) onRefresh();
@@ -109,7 +109,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ id, title, description, status, onR
         .then(response => {
             if (!response.ok) {
                 return response.json().then(errorData => {
-                    throw new Error(errorData.title || 'Failed to update todo');
+                    throw errorData;
                 });
             }
             console.log(`Successfully updated todo with id: ${id}`);

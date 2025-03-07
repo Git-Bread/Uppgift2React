@@ -66,11 +66,11 @@ const List: React.FC<ListProps> = ({ setError, refreshTrigger }) => {
     .catch(err => {
       console.error('API Error:', err);
       if (err.status && err.errors) {
-        // This is a structured API error
+        //Api error
         setApiErrorDetails(err);
         setError(`${err.title} (${err.status}): ${err.errors}`);
       } else {
-        // This is a network or other error
+        //Network error
         setError(`Connection Error: ${err.errors || 'Failed to connect to the server'}`);
       }
       setIsLoading(false);

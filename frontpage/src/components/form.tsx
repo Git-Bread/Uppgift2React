@@ -68,7 +68,7 @@ const Form: React.FC<FormProps> = ({ onRefresh, setError }) => {
     .then(response => {
       if (!response.ok) {
         return response.json().then(errorData => {
-          throw { errors: errorData.errors || 'Unknown error' };
+            throw errorData;
         });
       }
       return response.json();
