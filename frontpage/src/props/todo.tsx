@@ -1,24 +1,97 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TodoStatus } from '../components/list';
 
 interface TodoItemProps {
     id: number;
-    text: string;
+    title: string;
+    description: string;
     completed: boolean;
     status: TodoStatus;
+    onRefresh?: () => void;
 }
 
-const TodoItem: React.FC<TodoItemProps> = ({ id, text, status }) => {
+const TodoItem: React.FC<TodoItemProps> = ({ id, title, description, status, onRefresh }) => {
+    const [isEditing, setIsEditing] = useState<boolean>(false);
+    const [editTitle, setEditTitle] = useState<string>(title);
+    const [editDescription, setEditDescription] = useState<string>(description);
+
+    //delete the todo
     const onDelete = (id: number): void => {
-        console.log(`Deleting todo with id: ${id}`);
+        fetch(`http://localhost:5000/api/todo/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to delete todo');
+            }
+            console.log(`Successfully deleted todo with id: ${id}`);
+            if (onRefresh) onRefresh();
+        })
+        .catch(err => {
+            console.error(`Error deleting todo: ${err.message}`);
+        });
     };
 
+    //change mode
     const onToggle = (id: number): void => {
-        console.log(`Toggling completion status of todo with id: ${id}`);
+        fetch(`http://localhost:5000/api/todo/${id}/change-status`, {
+            method: 'PATCH',
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to update todo status');
+            }
+            if (onRefresh) onRefresh();
+            return response.json();
+        })
+        .catch(err => {
+            console.error(`Error updating todo status: ${err.message}`);
+        });
     };
 
     const onEdit = (id: number): void => {
-        console.log(`Editing todo with id: ${id}`);
+        // Initialize form fields with current values
+        setEditTitle(title);
+        setEditDescription(description);
+        // Set the editing state to true to show the form
+        setIsEditing(true);
+    };
+
+    // Save changes
+    const onSave = (): void => {
+        // Create updated todo object
+        const updatedTodo = {
+            title: editTitle,
+            description: editDescription,
+            status: status
+        };
+
+        // Send PUT request to update the todo
+        fetch(`http://localhost:5000/api/todo/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(updatedTodo)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to update todo');
+            }
+            console.log(`Successfully updated todo with id: ${id}`);
+            setIsEditing(false);
+            if (onRefresh) onRefresh();
+        })
+        .catch(err => {
+            console.error(`Error updating todo: ${err.message}`);
+        });
     };
 
     const getStatusText = () => {
@@ -46,19 +119,69 @@ const TodoItem: React.FC<TodoItemProps> = ({ id, text, status }) => {
         }
     };
 
+    // If in editing mode, show the edit form
+    if (isEditing) {
+        return (
+            <li className="mb-4">
+                <div className="box p-4">
+                    <div className="field">
+                        <label className="label">Title</label>
+                        <div className="control">
+                            <input 
+                                className="input" 
+                                type="text" 
+                                value={editTitle}
+                                onChange={(e) => setEditTitle(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                    
+                    <div className="field">
+                        <label className="label">Description</label>
+                        <div className="control">
+                            <textarea 
+                                className="textarea" 
+                                value={editDescription}
+                                onChange={(e) => setEditDescription(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                    
+                    <div className="field is-grouped">
+                        <div className="control">
+                            <button 
+                                className="button is-small is-success" 
+                                onClick={onSave}
+                                disabled={!editTitle.trim()}
+                            >
+                                Save
+                            </button>
+                        </div>
+                        <div className="control">
+                            <button className="button is-small" onClick={() => setIsEditing(false)}>Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        );
+    }
+
     return (
         <li className="mb-4">
             <div className="box p-4">
-                <div className="columns is-mobile is-vcentered mb-2">
+                <div className="columns is-mobile is-vcentered is-hidden-mobile">
                     <div className="column">
-                        <p className={status === TodoStatus.Completed ? "has-text-grey-light" : ""} 
-                           style={{ textDecoration: status === TodoStatus.Completed ? 'line-through' : 'none' }}>
-                            {text}
-                        </p>
+                        <h4 className={`title is-5 ${status === TodoStatus.Completed ? "has-text-grey-light" : ""}`}
+                            style={{ textDecoration: status === TodoStatus.Completed ? 'line-through' : 'none' }}>
+                            {title}
+                        </h4>
+                        <p className="subtitle is-6">{description}</p>
                     </div>
+
+                    {/* Status checkbox (non-mobile) */}
                     <div className="column is-narrow">
                         <label className="checkbox">
-                            <span className={`${getStatusStyle()}`}>
+                            <span className={`${getStatusStyle()} is-size-7`}>
                                 {getStatusText()}
                             </span>
                             <input 
@@ -75,10 +198,23 @@ const TodoItem: React.FC<TodoItemProps> = ({ id, text, status }) => {
                     </div>
                 </div>
                 
-                {/* Second row: Action buttons */}
-                <div className="columns is-mobile">
-                    <div className="column">
-                        <div className="buttons is-left">
+                {/* Mobile view - Stacked layout */}
+                <div className="is-hidden-tablet">
+                    {/* Title and description */}
+                    <div className="mb-3">
+                        <h4 className={`title is-5 ${status === TodoStatus.Completed ? "has-text-grey-light" : ""}`}
+                            style={{ textDecoration: status === TodoStatus.Completed ? 'line-through' : 'none' }}>
+                            {title}
+                        </h4>
+                        <h5 className="subtitle is-6">{description}</h5>
+                    </div>
+                </div>
+                
+                {/* Action buttons and status (mobile and desktop) */}
+                <div className="columns is-mobile mt-3">
+                    {/* Action buttons */}
+                    <div className="column is-8">
+                        <div className="buttons">
                             <button className="button is-small is-info is-light" onClick={() => onEdit(id)}>
                                 <span>Edit</span>
                             </button>
@@ -86,6 +222,25 @@ const TodoItem: React.FC<TodoItemProps> = ({ id, text, status }) => {
                                 <span>Remove</span>
                             </button>
                         </div>
+                    </div>
+                    
+                    {/* Status checkbox (mobile only) */}
+                    <div className="column is-4 has-text-right is-hidden-tablet">
+                        <label className="checkbox mr-2">
+                            <span className={`${getStatusStyle()} is-size-7`}>
+                                {getStatusText()}
+                            </span>
+                            <input 
+                                type="checkbox" 
+                                checked={status === TodoStatus.Completed}
+                                onChange={() => onToggle(id)} 
+                                className="ml-1"
+                                style={{
+                                    opacity: status === TodoStatus.NotStarted ? 0.5 : 1,
+                                    accentColor: status === TodoStatus.Completed ? 'green' : 'blue'
+                                }}
+                            />
+                        </label>
                     </div>
                 </div>
             </div>

@@ -24,6 +24,11 @@ interface ListProps {
 const List: React.FC<ListProps> = ({ setError, refreshTrigger }) => {
   const [todos, setTodos] = useState<TodoItem[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [refresh, setRefresh] = useState<number>(0);
+  
+  const handleRefresh = () => {
+    setRefresh(prev => prev + 1); // Trigger a re-fetch
+  };
   
   useEffect(() => {
     fetch('http://localhost:5000/api/todo', {
@@ -46,11 +51,12 @@ const List: React.FC<ListProps> = ({ setError, refreshTrigger }) => {
       setError('Could not load todos: ' + err.message);
       setIsLoading(false);
     });
-  }, [refreshTrigger, setError]);
+  }, [refreshTrigger, refresh, setError]);
   
   if (isLoading) {
     return <p>Loading todos...</p>;
   }
+  
   return (
     <div className="todo-list">
       <h2 className="title is-4">Todo List</h2>
@@ -63,9 +69,11 @@ const List: React.FC<ListProps> = ({ setError, refreshTrigger }) => {
             <TodoItem
               key={todo.id}
               id={todo.id}
-              text={`${todo.title} - ${todo.description || 'No description'}`}
+              title={todo.title}
+              description={todo.description || 'No description'}
               completed={todo.status === TodoStatus.Completed}
               status={todo.status}
+              onRefresh={handleRefresh}
             />
           ))}
         </ul>
